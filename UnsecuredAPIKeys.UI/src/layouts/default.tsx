@@ -41,6 +41,16 @@ export default function DefaultLayout({
           <p className="text-primary">DiploWords [Ai]</p>
         </Link>
 
+        {/* GitHub Project Attribution - Required by License */}
+        <Link
+          isExternal
+          className="text-default-600 hover:text-primary"
+          href="https://github.com/TSCarterJr/UnsecuredAPIKeys-OpenSource"
+          title="View source code on GitHub"
+        >
+          Based on UnsecuredAPIKeys Open Source
+        </Link>
+
         {/* Uptime Status Link */}
         <Link
           isExternal

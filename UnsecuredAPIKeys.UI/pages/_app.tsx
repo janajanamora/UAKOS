@@ -12,18 +12,23 @@ const ClientProvider = dynamic(() => import("@/components/ClientProvider"), {
 })
 
 // Initialize Sentry
-Sentry.init({
-  dsn: "https://b5212b9f779f5e18eacc275eb8cb889a@o4508716166152192.ingest.us.sentry.io/4509237282930688",
-  sendDefaultPii: true,
-  integrations: [],
-  tracePropagationTargets: [
-    "https://api.unsecuredapikeys.com",
-    "https://unsecuredapikeys.com",
-  ],
-  // Session Replay
-  replaysSessionSampleRate: 0.0,
-  replaysOnErrorSampleRate: 0.0,
-})
+if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+  Sentry.init({
+    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    environment: process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT || 'development',
+    sendDefaultPii: true,
+    integrations: [],
+    tracesSampleRate: parseFloat(process.env.NEXT_PUBLIC_SENTRY_TRACES_SAMPLE_RATE || '0.1'),
+    tracePropagationTargets: [
+      process.env.NEXT_PUBLIC_API_URL || "https://api.unsecuredapikeys.com",
+      "https://unsecuredapikeys.com",
+      "localhost",
+    ],
+    // Session Replay
+    replaysSessionSampleRate: parseFloat(process.env.NEXT_PUBLIC_SENTRY_REPLAYS_SESSION_SAMPLE_RATE || '0.0'),
+    replaysOnErrorSampleRate: parseFloat(process.env.NEXT_PUBLIC_SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE || '0.0'),
+  })
+}
 
 declare module "@react-types/shared" {
   interface RouterConfig {

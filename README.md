@@ -190,7 +190,18 @@ SENTRY_PROJECT="your-sentry-project"
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under a **custom attribution-required license** based on MIT - see the [LICENSE](LICENSE) file for complete details.
+
+### ⚠️ IMPORTANT ATTRIBUTION REQUIREMENT
+
+**Any use of this code (even partial) requires UI attribution.** If you use ANY portion of this project in software with a public-facing interface, you MUST:
+
+- Display a link to this GitHub repository in your UI
+- Link text should be "Based on UnsecuredAPIKeys Open Source" or similar  
+- Link to: `https://github.com/TSCarterJr/UnsecuredAPIKeys-OpenSource`
+- Must be visible on main page or footer
+
+This applies whether you use the entire project, just the backend APIs, validation logic, bots, or any other component. **Removing attribution violates the license and constitutes copyright infringement.**
 
 ## ⚖️ Legal and Ethical Considerations
 
@@ -204,6 +215,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - The open source community for inspiration and tools
 - Security researchers who highlight the importance of proper API key management
 - Contributors who help improve the project
+
+## 🌐 Domain Available
+
+The domain **unsecuredapikeys.com** is available for sale. If you're interested in acquiring this domain for your own security-focused project or business, please reach out through the GitHub repository.
 
 ## 📞 Support
 

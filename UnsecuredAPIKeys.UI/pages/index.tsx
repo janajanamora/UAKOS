@@ -1,12 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { Link } from "@heroui/link";
 import { Button } from "@heroui/button";
 import { Code } from "@heroui/code";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/dropdown";
 import Head from "next/head";
+import Cookies from "js-cookie";
 
 import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
+import { GithubIcon, DiscordIcon } from "@/components/icons";
 import DefaultLayout from "@/layouts/default";
+import { ApiKey, KeyStats, ApiKeyType, RateLimitInfo as RateLimitInfoType } from "@/types";
+import { fetchWithRateLimit, cancelRequests } from "@/utils/api";
+import { analytics } from "@/utils/analytics";
+import Disclaimer from "@/components/Disclaimer";
+import DiscordLogin from "@/components/DiscordLogin";
+import RateLimitInfo from "@/components/RateLimitInfo";
+import TotalDisplayCounter from "@/components/TotalDisplayCounter";
+import ActiveUserCounter from "@/components/ActiveUserCounter";
+import AnimatedNumber from "@/components/AnimatedNumber";
+import DonationCounter from "@/components/DonationCounter";
+import PayPalDonateButton from "@/components/PayPalDonateButton";
 
 // Enhanced Loading Messages
 const loadingMessages = [
@@ -429,14 +442,15 @@ export default function IndexPage() {
   };
 
   const dropdownItems = useMemo(() => {
-    const items = [<DropdownItem key="Random">Random (Surprise me! 🎲)</DropdownItem>];
-
+    const items = [
+      { key: "Random", label: "Random (Surprise me! 🎲)" }
+    ];
+    
     apiKeyTypes.forEach((type) => {
-      items.push(
-        <DropdownItem key={type.apiTypeId}>
-          {`${type.apiType} (${type.keyCount.toLocaleString()} victims)`}
-        </DropdownItem>,
-      );
+      items.push({
+        key: type.apiTypeId.toString(),
+        label: `${type.apiType} (${type.keyCount.toLocaleString()} victims)`
+      });
     });
 
     return items;
@@ -988,16 +1002,20 @@ export default function IndexPage() {
               </DropdownTrigger>
               <DropdownMenu
                 aria-label="Select API Key Type"
-                items={dropdownItems}
                 selectedKeys={new Set([selectedKeyType.toString()])}
                 selectionMode="single"
+                items={dropdownItems}
                 onSelectionChange={(keys) =>
                   handleSelectionChange(
                     keys instanceof Set ? Array.from(keys)[0] : undefined,
                   )
                 }
               >
-                {(item) => item}
+                {(item) => (
+                  <DropdownItem key={item.key}>
+                    {item.label}
+                  </DropdownItem>
+                )}
               </DropdownMenu>
             </Dropdown>
           </div>
