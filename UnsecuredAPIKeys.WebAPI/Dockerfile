@@ -1,15 +1,20 @@
-# ---------- 用 SDK 镜像编译 ----------
+# ---------- 构建阶段 ----------
 FROM mcr.microsoft.com/dotnet/sdk:9.0-preview AS build
+
+# 1. 把整个仓库拷进来
 WORKDIR /src
 COPY . .
 
-# ❶ 还原 WebAPI 项目（解决方案文件被忽略了）
+# 2. 进入 WebAPI 子目录   ←← 关键行
+WORKDIR /src/UnsecuredAPIKeys.WebAPI
+
+# 3. 还原依赖，Data 项目会被正确找到
 RUN dotnet restore ./UnsecuredAPIKeys.WebAPI.csproj
 
-# ❷ 发布同一个项目，连依赖一起进 /app
+# 4. 发布（包含 Data 依赖），输出到 /app
 RUN dotnet publish ./UnsecuredAPIKeys.WebAPI.csproj -c Release -o /app
 
-# ---------- 用运行时镜像启动 ----------
+# ---------- 运行阶段 ----------
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-preview
 WORKDIR /app
 COPY --from=build /app .
