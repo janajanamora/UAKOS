@@ -3,10 +3,10 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0-preview AS build
 WORKDIR /src
 COPY . .
 
-# 在仓库根执行：一次还原所有项目
-RUN dotnet restore ./UnsecuredAPIKeys.sln
+# ❶ 还原 WebAPI 项目（解决方案文件被忽略了）
+RUN dotnet restore ./UnsecuredAPIKeys.WebAPI.csproj
 
-# 发布指定 WebAPI 项目，连依赖一起编进 /app
+# ❷ 发布同一个项目，连依赖一起进 /app
 RUN dotnet publish ./UnsecuredAPIKeys.WebAPI.csproj -c Release -o /app
 
 # ---------- 用运行时镜像启动 ----------
