@@ -3,12 +3,11 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0-preview AS build
 WORKDIR /src
 COPY . .
 
-# ① 进入子目录再还原依赖
-WORKDIR /src/UnsecuredAPIKeys.WebAPI
-RUN dotnet restore
+# 在仓库根执行：一次还原所有项目
+RUN dotnet restore ./UnsecuredAPIKeys.sln
 
-# ② 继续在同一目录发布
-RUN dotnet publish -c Release -o /app
+# 发布指定 WebAPI 项目，连依赖一起编进 /app
+RUN dotnet publish ./UnsecuredAPIKeys.WebAPI.csproj -c Release -o /app
 
 # ---------- 用运行时镜像启动 ----------
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-preview
